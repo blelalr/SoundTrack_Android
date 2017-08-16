@@ -1,12 +1,17 @@
 package com.eros.soundtrack.enity;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by eroschen on 2017/7/10.
  */
 
 public class GridItem {
+    @SerializedName("_id")
     private String id;
+    @SerializedName("poster_url")
     private String posterURL;
+    @SerializedName("poster")
     private String posterURL_2;
 
     public String getId() {

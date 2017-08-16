@@ -1,6 +1,5 @@
 package com.eros.soundtrack.actiity;
 
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,25 +11,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.adapter.ViewPagerAdapter;
-import com.eros.soundtrack.enity.GridItem;
 import com.eros.soundtrack.fragment.SpannedGridViewFragment;
 import com.eros.soundtrack.helper.SoundTrackInfo;
-import com.eros.soundtrack.interfaces.ApiParameters;
-import com.eros.soundtrack.interfaces.AsyncResponse;
-import com.eros.soundtrack.task.GetAllTask;
-import com.eros.soundtrack.task.GetPopularTask;
-import com.eros.soundtrack.task.GetRecentTask;
+import com.eros.soundtrack.retrofit.APIHelper;
+import com.eros.soundtrack.retrofit.APIResponse;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements AsyncResponse {
+public class MainActivity extends AppCompatActivity implements APIResponse {
 
     private DrawerLayout mDrawerLayout;
+    private APIHelper apiHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +66,34 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     }
 
     private void callAPI() {
-        GetPopularTask getPopularTask = new GetPopularTask(this);
-        getPopularTask.listener = this;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            getPopularTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        else
-            getPopularTask.execute();
 
-        GetRecentTask getRecentTask = new GetRecentTask(this);
-        getRecentTask.listener = this;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            getRecentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        else
-            getRecentTask.execute();
+        apiHelper = new APIHelper(this);
+        apiHelper.getPopularMovies(100, 0);
+        apiHelper.getRecentMovies(100, 0);
 
-        GetAllTask getAllTask = new GetAllTask(this);
-        getAllTask.listener = this;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            getAllTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        else
-            getAllTask.execute();
+
+//        GetPopularTask getPopularTask = new GetPopularTask(this);
+//        getPopularTask.listener = this;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+//            getPopularTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        else
+//            getPopularTask.execute();
+//
+//        GetRecentTask getRecentTask = new GetRecentTask(this);
+//        getRecentTask.listener = this;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+//            getRecentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        else
+//            getRecentTask.execute();
+//
+//        GetAllTask getAllTask = new GetAllTask(this);
+//        getAllTask.listener = this;
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+//            getAllTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        else
+//            getAllTask.execute();
     }
 
     @Override
@@ -169,29 +171,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
                 });
     }
 
-    @Override
-    public void processFinish(Object callback, int from) {
-        switch(from) {
-            case ApiParameters.GET_POPULAR:
-                SoundTrackInfo.getInstance().setPopularMovies((ArrayList<GridItem>) callback);
-                checkAllTaskisFinish();
-
-
-                break;
-            case ApiParameters.GET_RECENT:
-                SoundTrackInfo.getInstance().setRecentMovies((ArrayList<GridItem>) callback);
-                checkAllTaskisFinish();
-
-                break;
-            case ApiParameters.GET_ALL:
-//                All List
-//                checkAllTaskisFinish();
-                break;
-
-        }
-
-    }
-
     private void checkAllTaskisFinish() {
         if(SoundTrackInfo.getInstance().getPopularMovies().size() != 0 && SoundTrackInfo.getInstance().getRecentMovies().size() != 0 ) {
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -199,6 +178,22 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(viewPager);
         }
+
+    }
+
+    @Override
+    public void Success(int from) {
+        Log.d("eros", "success call back");
+        if(SoundTrackInfo.getInstance().getPopularMovies().size()!= 0 && SoundTrackInfo.getInstance().getRecentMovies().size()!= 0){
+            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+            setupViewPager(viewPager);
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+    }
+
+    @Override
+    public void Failure(String message) {
 
     }
 }
