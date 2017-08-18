@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,6 +18,7 @@ import com.eros.soundtrack.R;
 import com.eros.soundtrack.adapter.ViewPagerAdapter;
 import com.eros.soundtrack.fragment.SpannedGridViewFragment;
 import com.eros.soundtrack.helper.SoundTrackInfo;
+import com.eros.soundtrack.interfaces.ApiParameters;
 import com.eros.soundtrack.retrofit.APIHelper;
 import com.eros.soundtrack.retrofit.APIResponse;
 
@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
 
     private DrawerLayout mDrawerLayout;
     private APIHelper apiHelper;
+    private SpannedGridViewFragment popularFragment;
+    private SpannedGridViewFragment recentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,34 +68,9 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
     }
 
     private void callAPI() {
-
         apiHelper = new APIHelper(this);
-        apiHelper.getPopularMovies(100, 0);
-        apiHelper.getRecentMovies(100, 0);
-
-
-
-//        GetPopularTask getPopularTask = new GetPopularTask(this);
-//        getPopularTask.listener = this;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-//            getPopularTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//        else
-//            getPopularTask.execute();
-//
-//        GetRecentTask getRecentTask = new GetRecentTask(this);
-//        getRecentTask.listener = this;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-//            getRecentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//        else
-//            getRecentTask.execute();
-//
-//        GetAllTask getAllTask = new GetAllTask(this);
-//        getAllTask.listener = this;
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-//            getAllTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//        else
-//            getAllTask.execute();
+        apiHelper.getPopularMovies(1);
+        apiHelper.getRecentMovies(1);
     }
 
     @Override
@@ -153,8 +130,10 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SpannedGridViewFragment(SoundTrackInfo.getInstance().getPopularMovies()), "Popular");
-        adapter.addFragment(new SpannedGridViewFragment(SoundTrackInfo.getInstance().getRecentMovies()), "Recent");
+        popularFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getPopularMovies(), ApiParameters.GET_POPULAR);
+        recentFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getRecentMovies(), ApiParameters.GET_RECENT);
+        adapter.addFragment(popularFragment, "Popular");
+        adapter.addFragment(recentFragment, "Recent");
 //        adapter.addFragment(new SpannedGridViewFragment(), "All");
         viewPager.setAdapter(adapter);
     }
@@ -171,19 +150,8 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
                 });
     }
 
-    private void checkAllTaskisFinish() {
-        if(SoundTrackInfo.getInstance().getPopularMovies().size() != 0 && SoundTrackInfo.getInstance().getRecentMovies().size() != 0 ) {
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            setupViewPager(viewPager);
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-
-    }
-
     @Override
-    public void Success(int from) {
-        Log.d("eros", "success call back");
+    public void Success(Object o, int from) {
         if(SoundTrackInfo.getInstance().getPopularMovies().size()!= 0 && SoundTrackInfo.getInstance().getRecentMovies().size()!= 0){
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             setupViewPager(viewPager);

@@ -49,4 +49,18 @@ public class SoundTrackInfo {
     public void setAllMovies(ArrayList<GridItem> allMovies) {
         this.allMovies = allMovies;
     }
+
+    public void addPopularMovies(ArrayList<GridItem> popularMovies){
+        for(GridItem movie: popularMovies){
+            this.popularMovies.add(movie);
+        }
+
+    }
+    public void addRecentMovies(ArrayList<GridItem> recentMovies){
+        for(GridItem movie: recentMovies){
+            this.recentMovies.add(movie);
+        }
+
+    }
+
 }

@@ -5,7 +5,7 @@ package com.eros.soundtrack.retrofit;
  */
 
 public interface APIResponse {
-    void Success(int from);
+    void Success(Object o, int from);
     void Failure(String message);
 
 }

@@ -12,7 +12,7 @@ import retrofit2.Response;
  * Created by eroschen on 2017/7/12.
  */
 
-public class APIHelper implements ApiParameters {
+public class APIHelper implements ApiParameters{
     private static APIHelper instance = null;
     private static APIService service;
     private static APIResponse apiResponse;
@@ -33,15 +33,15 @@ public class APIHelper implements ApiParameters {
         return instance;
     }
 
-    public void getPopularMovies(int limit, int skip){
-        Call<ResponseData> call = service.getPopularMovies(limit, skip);
+    public void getPopularMovies(int page){
+        Call<ResponseData> call = service.getPopularMovies(page);
 
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                 if(response.isSuccessful()){
-                    SoundTrackInfo.getInstance().setPopularMovies(response.body().getDataList());
-                    apiResponse.Success(GET_POPULAR);
+                    SoundTrackInfo.getInstance().addPopularMovies(response.body().getDataList());
+                    apiResponse.Success(response.body().getLastPage(), GET_POPULAR);
                 }
             }
 
@@ -53,15 +53,15 @@ public class APIHelper implements ApiParameters {
 
     }
 
-    public void getRecentMovies(int limit, int skip){
-        Call<ResponseData> call = service.getRecentMovies(limit, skip);
+    public void getRecentMovies(int page){
+        Call<ResponseData> call = service.getRecentMovies(page);
 
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                 if(response.isSuccessful()){
-                    SoundTrackInfo.getInstance().setRecentMovies(response.body().getDataList());
-                    apiResponse.Success(GET_RECENT);
+                    SoundTrackInfo.getInstance().addRecentMovies(response.body().getDataList());
+                    apiResponse.Success(response.body().getLastPage(), GET_RECENT);
                 }
             }
 

@@ -16,8 +16,8 @@ public interface APIService {
     String SERVICE_ENDPOINT = "http://www.api.what-song.com/";
 
     @GET("popular-movies")
-    Call<ResponseData> getPopularMovies(@Query("limit") int limit, @Query("skip") int skip);
+    Call<ResponseData> getPopularMovies(@Query("page") int page);
 
     @GET("recent-movies")
-    Call<ResponseData> getRecentMovies(@Query("limit") int limit, @Query("skip") int skip);
+    Call<ResponseData> getRecentMovies(@Query("page") int page);
 }

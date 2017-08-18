@@ -12,6 +12,17 @@ public class ResponseData {
     @SerializedName("data")
     private ArrayList<GridItem> dataList;
 
+    @SerializedName("is_last_page")
+    private Boolean isLastPage;
+
+    public Boolean getLastPage() {
+        return isLastPage;
+    }
+
+    public void setLastPage(Boolean lastPage) {
+        isLastPage = lastPage;
+    }
+
     public ArrayList<GridItem> getDataList() {
         return dataList;
     }
