@@ -12,7 +12,9 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_view"/>
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -54,6 +56,12 @@
         <!--android:layout_margin="@dimen/fab_margin"-->
         <!--android:src="@drawable/ic_done" />-->
     </android.support.design.widget.CoordinatorLayout>
+    <FrameLayout
+        android:id="@+id/media_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
 
-
+    </FrameLayout>
+</RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

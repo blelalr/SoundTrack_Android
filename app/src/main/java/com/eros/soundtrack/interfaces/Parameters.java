@@ -10,4 +10,7 @@ public interface Parameters {
     //player status
     String Pause = "pause";
     String Play  = "play";
+
+    String Full = "full";
+    String Mini = "mini";
 }

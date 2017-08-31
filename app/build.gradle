@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MyAndroidKey'
+            keyPassword '2017$1234'
+            storeFile file('/Users/eroschen/eros.jks')
+            storePassword '2017$1234'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
@@ -15,11 +23,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
     }
 
+    lintOptions {
+        disable 'ValidFragment'
+        checkReleaseBuilds false
+    }
     useLibrary 'org.apache.http.legacy'
 }
 
@@ -38,12 +51,9 @@ dependencies {
     //glide
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.android.support:support-v4:19.1.0'
-
     //ok http
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-
     //http
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-
 }

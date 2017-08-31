@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by eroschen on 2017/8/16.
  */
 
-public class ResponseData {
+public class GridData {
     @SerializedName("data")
     private ArrayList<GridItem> dataList;
 

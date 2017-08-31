@@ -2,6 +2,7 @@ package com.eros.soundtrack.helper;
 
 
 import com.eros.soundtrack.enity.GridItem;
+import com.eros.soundtrack.enity.Track;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,12 @@ import java.util.ArrayList;
 
 public class SoundTrackInfo {
     private static SoundTrackInfo instance;
+
+    private ArrayList<GridItem> recentMovies = new ArrayList<>();
+    private ArrayList<GridItem> popularMovies = new ArrayList<>();
+    private ArrayList<GridItem> allMovies = new ArrayList<>();
+    private ArrayList<Track> trackList = new ArrayList<>();
+
     public static SoundTrackInfo getInstance() {
         if (instance == null){
             synchronized (SoundTrackInfo.class) {
@@ -20,11 +27,6 @@ public class SoundTrackInfo {
 
         return instance;
     }
-
-    private ArrayList<GridItem> recentMovies = new ArrayList<>();
-    private ArrayList<GridItem> popularMovies = new ArrayList<>();
-    private ArrayList<GridItem> allMovies = new ArrayList<>();
-    private PlayerContent playerContent = new PlayerContent();
 
     public ArrayList<GridItem> getRecentMovies() {
         return recentMovies;
@@ -60,7 +62,15 @@ public class SoundTrackInfo {
         for(GridItem movie: recentMovies){
             this.recentMovies.add(movie);
         }
+    }
 
+
+    public ArrayList<Track> getTrackList() {
+        return trackList;
+    }
+
+    public void setTrackList(ArrayList<Track> trackList) {
+        this.trackList = trackList;
     }
 
 }

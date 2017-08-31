@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.actiity.MainActivity;
 import com.eros.soundtrack.enity.GridItem;
-
 
 import java.util.ArrayList;
 
@@ -40,6 +42,7 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
                 .load(mData.get(position).getPosterURL())
                 .centerCrop()
                 .placeholder(R.color.colorAccent)
+                .listener(requestListener)
                 .error(R.color.white50Transparent)
                 .into(holder.mImageView);
     }
@@ -57,5 +60,21 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
             mImageView = (ImageView) view.findViewById(R.id.iv_poster);
         }
     }
+
+    private RequestListener<String, GlideDrawable> requestListener = new RequestListener<String, GlideDrawable>() {
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            // todo log exception
+
+            // important to return false so the error placeholder can be placed
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            return false;
+        }
+    };
+
 
 }

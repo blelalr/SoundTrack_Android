@@ -3,15 +3,12 @@ package com.eros.soundtrack.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.enity.GridItem;
-import com.eros.soundtrack.manager.ItemClickSupport;
 import com.eros.soundtrack.manager.SpannedGridLayoutManager;
 
 import java.util.ArrayList;
@@ -22,77 +19,19 @@ import java.util.ArrayList;
 
 public class SpannedGridViewFragment extends BaseFragment {
 
-    //    private TwoWayView mRecyclerView;
-
     public ArrayList<GridItem> mData = new ArrayList<>();
     public RecyclerView mRecyclerView;
-//    private GridViewRecyclerAdapter myAdapter;
-//    private ArrayList<GridItem> mData;
-//    private MainActivity mAct;
-//    private APIHelper apiHelper;
-//    private int popPage = 1;
-//    private int recPage = 1;
-//    private int mIndex;
     public SpannedGridLayoutManager manager;
 
     public SpannedGridViewFragment() {
-//        this.mData = data;
-//        this.apiHelper = new APIHelper(this);
-//        this.mIndex = index;
+
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-////        this.mAct = (MainActivity) context;
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_asymmetric_gridview, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-//
-//        myAdapter = new GridViewRecyclerAdapter(mAct, mData);
-//        mRecyclerView.setAdapter(myAdapter);
-
-
-
-
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-////                updateState(scrollState);
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                Log.d("eros", "First: " + mRecyclerView.getFirstVisiblePosition());
-//                Log.d("eros", "Count: " + mRecyclerView.getChildCount());
-//                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
-//                int lastChildBottom = lastChildView.getBottom();
-//                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
-//                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-//
-//                if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
-//
-//                if(mIndex == ApiParameters.GET_POPULAR){
-//                        if(mRecyclerView.getChildCount() == SoundTrackInfo.getInstance().getPopularMovies().size()){
-//                            popPage = popPage + 1;
-//                            apiHelper.getPopularMovies(popPage);
-//                        }
-//                    }
-//                    if(mIndex == ApiParameters.GET_RECENT){
-//                        if(mRecyclerView.getChildCount() == SoundTrackInfo.getInstance().getRecentMovies().size()) {
-//                            recPage = recPage + 1;
-//                            apiHelper.getRecentMovies(recPage);
-//                        }
-//                    }
-//
-//                }
-//            }
-//        });
-
-
         return view;
     }
 
@@ -119,43 +58,7 @@ public class SpannedGridViewFragment extends BaseFragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
 
-        final Toast mToast = Toast.makeText(mAct, "", Toast.LENGTH_SHORT);
-        mToast.setGravity(Gravity.CENTER, 0, 0);
-
-        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                mToast.setText("Item clicked: " + position);
-                mToast.show();
-            }
-
-        });
 
 
     }
-
-    //    public void setData(ArrayList<GridItem> mData) {
-//        this.mData = mData;
-//    }
-//
-//    @Override
-//    public void Success(final Object isLastPage, final int from) {
-//        if ((Boolean) isLastPage) {
-//            Log.d("eros", "isLastPage: " + isLastPage);
-//            return;
-//        }
-//
-//        if(from == ApiParameters.GET_POPULAR)
-//            setData(SoundTrackInfo.getInstance().getPopularMovies());
-//
-//        if(from == ApiParameters.GET_RECENT)
-//            setData(SoundTrackInfo.getInstance().getRecentMovies());
-//
-//        myAdapter.notifyItemRangeChanged(0, myAdapter.getItemCount());
-//    }
-//
-//    @Override
-//    public void Failure(String message) {
-//
-//    }
 }

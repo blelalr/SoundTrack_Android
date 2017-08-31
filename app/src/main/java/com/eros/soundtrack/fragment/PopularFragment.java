@@ -20,12 +20,17 @@ package com.eros.soundtrack.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.eros.soundtrack.actiity.MainActivity;
 import com.eros.soundtrack.adapter.GridViewRecyclerAdapter;
 import com.eros.soundtrack.helper.SoundTrackInfo;
+import com.eros.soundtrack.manager.ItemClickSupport;
 import com.eros.soundtrack.retrofit.APIHelper;
 
 /**
@@ -36,7 +41,13 @@ public class PopularFragment extends SpannedGridViewFragment {
     private GridViewRecyclerAdapter myAdapter;
     private int page = 1;
     private boolean loading = false;
-    private int visibleItemCount, firstVisibleItem, lastVisibleItem;
+    private int lastVisibleItem;
+    private EndlessScrollListener endlessScrollListener = new EndlessScrollListener();
+    private MainActivity.TrackOnLoaded mTrackOnLoaded;
+
+    public PopularFragment(MainActivity.TrackOnLoaded trackOnLoaded) {
+        this.mTrackOnLoaded = trackOnLoaded;
+    }
 
     @Nullable
     @Override
@@ -69,39 +80,69 @@ public class PopularFragment extends SpannedGridViewFragment {
         };
         first.getPopularMovies(page);
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(endlessScrollListener);
+
+        final Toast mToast = Toast.makeText(mAct, "", Toast.LENGTH_SHORT);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
+
+        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (!loading){
-
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem +2 >= manager.getItemCount()){
-                        page = page + 1;
-                        APIHelper loadMore = new APIHelper() {
-                            @Override
-                            protected void OnLoaded() {
-                                loading = false;
-                                myAdapter.mData = SoundTrackInfo.getInstance().getPopularMovies();
-                                myAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            protected void onFail(String message) {
-
-                            }
-                        };
-                        loadMore.getPopularMovies(page);
-                        loading = true;
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Log.d("eros", "Item clicked: " + position);
+                APIHelper getTrackList = new APIHelper() {
+                    @Override
+                    protected void OnLoaded() {
+                        mTrackOnLoaded.showMediaPlayer(SoundTrackInfo.getInstance().getTrackList().get(0));
                     }
-                }
+
+                    @Override
+                    protected void onFail(String message) {
+
+                    }
+                };
+                getTrackList.getMovieInfo(SoundTrackInfo.getInstance().getPopularMovies().get(position).getId());
 
             }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                visibleItemCount = recyclerView.getChildCount();
-                firstVisibleItem = manager.getFirstVisibleItemPosition();
-                lastVisibleItem = (firstVisibleItem + visibleItemCount);
-            }
         });
+
+
+    }
+
+    private class EndlessScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (loading)
+                return;
+
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem +2 >= manager.getItemCount()){
+                page += 1;
+                APIHelper loadMore = new APIHelper() {
+                    @Override
+                    protected void OnLoaded() {
+                        loading = false;
+                        myAdapter.mData = SoundTrackInfo.getInstance().getPopularMovies();
+                        myAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    protected void onFail(String message) {
+
+                    }
+                };
+                loadMore.getPopularMovies(page);
+                loading = true;
+            }
+
+
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            int visibleItemCount = recyclerView.getChildCount();
+            int firstVisibleItem = manager.getFirstVisibleItemPosition();
+            lastVisibleItem = (firstVisibleItem + visibleItemCount);
+        }
+
     }
 }

@@ -8,17 +8,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class GridItem {
     @SerializedName("_id")
-    private String id;
+    private int id;
     @SerializedName("poster_url")
     private String posterURL;
     @SerializedName("poster")
     private String posterURL_2;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

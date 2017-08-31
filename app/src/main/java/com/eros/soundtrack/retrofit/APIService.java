@@ -1,6 +1,7 @@
 package com.eros.soundtrack.retrofit;
 
-import com.eros.soundtrack.enity.ResponseData;
+import com.eros.soundtrack.enity.GridData;
+import com.eros.soundtrack.enity.TrackData;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,8 +17,14 @@ public interface APIService {
     String SERVICE_ENDPOINT = "http://www.api.what-song.com/";
 
     @GET("popular-movies")
-    Call<ResponseData> getPopularMovies(@Query("page") int page);
+    Call<GridData> getPopularMovies(@Query("page") int page);
 
     @GET("recent-movies")
-    Call<ResponseData> getRecentMovies(@Query("page") int page);
+    Call<GridData> getRecentMovies(@Query("page") int page);
+
+    @GET("movie-info")
+    Call<TrackData> getMovieInfo(@Query("movieID") int id);
+
+
+
 }

@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,20 +16,16 @@ import android.view.MenuItem;
 
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.adapter.ViewPagerAdapter;
+import com.eros.soundtrack.enity.Track;
+import com.eros.soundtrack.fragment.MediaPlayerFragment;
 import com.eros.soundtrack.fragment.PopularFragment;
 import com.eros.soundtrack.fragment.RecentFragment;
+import com.eros.soundtrack.helper.PlayerContent;
 
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity { //implements APIResponse {
+public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout mDrawerLayout;
-    private List<Fragment> listFragment;
-
-
-//    private APIHelper apiHelper;
-//    private SpannedGridViewFragment popularFragment;
-//    private SpannedGridViewFragment recentFragment;
+    private TrackOnLoaded trackOnLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,33 +33,40 @@ public class MainActivity extends AppCompatActivity { //implements APIResponse {
 
         setContentView(R.layout.activity_main);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
 
+        trackOnLoaded = new TrackOnLoaded() {
+            @Override
+            public void showMediaPlayer(Track track) {
+                PlayerContent.getInstance().setTrack(track);
+                MediaPlayerFragment mediaPlayerFragment = new MediaPlayerFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.media_player, mediaPlayerFragment).commit();
+            }
+        };
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        PopularFragment popularFragment = new PopularFragment(trackOnLoaded);
+        RecentFragment recentFragment = new RecentFragment();
+        adapter.addFragment(popularFragment, "Popular");
+        adapter.addFragment(recentFragment, "Recent");
+//        adapter.addFragment(new SpannedGridViewFragment(), "All");
+        viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-//        setMainFragment();
-
-//        callAPI();
-
-
-
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -77,19 +79,6 @@ public class MainActivity extends AppCompatActivity { //implements APIResponse {
 
 
     }
-
-//    private void setMainFragment() {
-//        PopularFragment fragment = new PopularFragment();
-//        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-//        t.replace(R.id.main_content, fragment);
-//        t.commit();
-//    }
-
-//    private void callAPI() {
-//        apiHelper = new APIHelper(this);
-//        apiHelper.getPopularMovies(1);
-//        apiHelper.getRecentMovies(1);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,18 +135,6 @@ public class MainActivity extends AppCompatActivity { //implements APIResponse {
         }
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        PopularFragment popularFragment = new PopularFragment();
-        RecentFragment recentFragment = new RecentFragment();
-//        popularFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getPopularMovies(), ApiParameters.GET_POPULAR);
-//        recentFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getRecentMovies(), ApiParameters.GET_RECENT);
-        adapter.addFragment(popularFragment, "Popular");
-        adapter.addFragment(recentFragment, "Recent");
-//        adapter.addFragment(new SpannedGridViewFragment(), "All");
-        viewPager.setAdapter(adapter);
-    }
-
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
@@ -170,18 +147,7 @@ public class MainActivity extends AppCompatActivity { //implements APIResponse {
             });
     }
 
-//    @Override
-//    public void Success(Object o, int from) {
-//        if(SoundTrackInfo.getInstance().getPopularMovies().size()!= 0 && SoundTrackInfo.getInstance().getRecentMovies().size()!= 0){
-//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-//            setupViewPager(viewPager);
-//            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//            tabLayout.setupWithViewPager(viewPager);
-//        }
-//    }
-//
-//    @Override
-//    public void Failure(String message) {
-//
-//    }
+    public interface TrackOnLoaded {
+        void showMediaPlayer(Track track);
+    }
 }
