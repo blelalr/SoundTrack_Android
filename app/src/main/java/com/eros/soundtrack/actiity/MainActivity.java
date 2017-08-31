@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,18 +17,20 @@ import android.view.MenuItem;
 
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.adapter.ViewPagerAdapter;
-import com.eros.soundtrack.fragment.SpannedGridViewFragment;
-import com.eros.soundtrack.helper.SoundTrackInfo;
-import com.eros.soundtrack.interfaces.ApiParameters;
-import com.eros.soundtrack.retrofit.APIHelper;
-import com.eros.soundtrack.retrofit.APIResponse;
+import com.eros.soundtrack.fragment.PopularFragment;
+import com.eros.soundtrack.fragment.RecentFragment;
 
-public class MainActivity extends AppCompatActivity implements APIResponse {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity { //implements APIResponse {
 
     private DrawerLayout mDrawerLayout;
-    private APIHelper apiHelper;
-    private SpannedGridViewFragment popularFragment;
-    private SpannedGridViewFragment recentFragment;
+    private List<Fragment> listFragment;
+
+
+//    private APIHelper apiHelper;
+//    private SpannedGridViewFragment popularFragment;
+//    private SpannedGridViewFragment recentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
 
         setContentView(R.layout.activity_main);
 
-//        setUpHandler();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,7 +52,16 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
-        callAPI();
+
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+//        setMainFragment();
+
+//        callAPI();
 
 
 
@@ -67,11 +78,18 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
 
     }
 
-    private void callAPI() {
-        apiHelper = new APIHelper(this);
-        apiHelper.getPopularMovies(1);
-        apiHelper.getRecentMovies(1);
-    }
+//    private void setMainFragment() {
+//        PopularFragment fragment = new PopularFragment();
+//        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+//        t.replace(R.id.main_content, fragment);
+//        t.commit();
+//    }
+
+//    private void callAPI() {
+//        apiHelper = new APIHelper(this);
+//        apiHelper.getPopularMovies(1);
+//        apiHelper.getRecentMovies(1);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,8 +148,10 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        popularFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getPopularMovies(), ApiParameters.GET_POPULAR);
-        recentFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getRecentMovies(), ApiParameters.GET_RECENT);
+        PopularFragment popularFragment = new PopularFragment();
+        RecentFragment recentFragment = new RecentFragment();
+//        popularFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getPopularMovies(), ApiParameters.GET_POPULAR);
+//        recentFragment = new SpannedGridViewFragment(SoundTrackInfo.getInstance().getRecentMovies(), ApiParameters.GET_RECENT);
         adapter.addFragment(popularFragment, "Popular");
         adapter.addFragment(recentFragment, "Recent");
 //        adapter.addFragment(new SpannedGridViewFragment(), "All");
@@ -140,28 +160,28 @@ public class MainActivity extends AppCompatActivity implements APIResponse {
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    menuItem.setChecked(true);
+                    mDrawerLayout.closeDrawers();
+                    return true;
+                }
+            });
     }
 
-    @Override
-    public void Success(Object o, int from) {
-        if(SoundTrackInfo.getInstance().getPopularMovies().size()!= 0 && SoundTrackInfo.getInstance().getRecentMovies().size()!= 0){
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            setupViewPager(viewPager);
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-    }
-
-    @Override
-    public void Failure(String message) {
-
-    }
+//    @Override
+//    public void Success(Object o, int from) {
+//        if(SoundTrackInfo.getInstance().getPopularMovies().size()!= 0 && SoundTrackInfo.getInstance().getRecentMovies().size()!= 0){
+//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//            setupViewPager(viewPager);
+//            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+//            tabLayout.setupWithViewPager(viewPager);
+//        }
+//    }
+//
+//    @Override
+//    public void Failure(String message) {
+//
+//    }
 }

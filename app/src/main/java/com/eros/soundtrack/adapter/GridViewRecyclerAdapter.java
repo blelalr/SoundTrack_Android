@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecyclerAdapter.SimpleViewHolder> {
     private final MainActivity mAct;
-    private final ArrayList<GridItem> mData;
+    public ArrayList<GridItem> mData;
 
     public GridViewRecyclerAdapter(MainActivity mAct, ArrayList<GridItem> data) {
         this.mAct = mAct;
@@ -57,4 +57,5 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
             mImageView = (ImageView) view.findViewById(R.id.iv_poster);
         }
     }
+
 }
