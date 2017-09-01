@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.adapter.ViewPagerAdapter;
@@ -22,9 +24,10 @@ import com.eros.soundtrack.fragment.PopularFragment;
 import com.eros.soundtrack.fragment.RecentFragment;
 import com.eros.soundtrack.helper.PlayerContent;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private FrameLayout mediaPlayer;
     private TrackOnLoaded trackOnLoaded;
 
     @Override
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mediaPlayer = (FrameLayout) findViewById(R.id.media_player);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -52,20 +56,27 @@ public class MainActivity extends AppCompatActivity{
         trackOnLoaded = new TrackOnLoaded() {
             @Override
             public void showMediaPlayer(Track track) {
+                mediaPlayer.setVisibility(View.VISIBLE);
                 PlayerContent.getInstance().setTrack(track);
                 MediaPlayerFragment mediaPlayerFragment = new MediaPlayerFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.media_player, mediaPlayerFragment).commit();
+            }
+
+            @Override
+            public void hideMediaPlayer() {
+                mediaPlayer.setVisibility(View.GONE);
             }
         };
 
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         PopularFragment popularFragment = new PopularFragment(trackOnLoaded);
-        RecentFragment recentFragment = new RecentFragment();
+        RecentFragment recentFragment = new RecentFragment(trackOnLoaded);
         adapter.addFragment(popularFragment, "Popular");
         adapter.addFragment(recentFragment, "Recent");
 //        adapter.addFragment(new SpannedGridViewFragment(), "All");
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -149,5 +160,7 @@ public class MainActivity extends AppCompatActivity{
 
     public interface TrackOnLoaded {
         void showMediaPlayer(Track track);
+
+        void hideMediaPlayer();
     }
 }

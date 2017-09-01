@@ -9,7 +9,7 @@ import com.eros.soundtrack.interfaces.Parameters;
 
 public class PlayerContent {
     private static PlayerContent instance;
-    private String status = Parameters.Pause;
+    private boolean isPlaying = false;
     private Track track;
     private String cover;
     private int curIndex = 0;
@@ -24,6 +24,13 @@ public class PlayerContent {
         return instance;
     }
 
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
 
     public String getCover() {
         return cover;
@@ -31,14 +38,6 @@ public class PlayerContent {
 
     public void setCover(String cover) {
         this.cover = cover;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public int getCurIndex() {

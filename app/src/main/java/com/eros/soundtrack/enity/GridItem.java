@@ -13,6 +13,7 @@ public class GridItem {
     private String posterURL;
     @SerializedName("poster")
     private String posterURL_2;
+    private boolean isPlaying = false;
 
     public int getId() {
         return id;
@@ -36,5 +37,13 @@ public class GridItem {
 
     public void setPosterURL_2(String posterURL_2) {
         this.posterURL_2 = posterURL_2;
+    }
+
+    public boolean getPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
     }
 }

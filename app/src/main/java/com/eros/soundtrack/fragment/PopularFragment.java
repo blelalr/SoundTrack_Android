@@ -20,7 +20,6 @@ package com.eros.soundtrack.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,20 +28,22 @@ import android.widget.Toast;
 
 import com.eros.soundtrack.actiity.MainActivity;
 import com.eros.soundtrack.adapter.GridViewRecyclerAdapter;
+import com.eros.soundtrack.enity.GridItem;
+import com.eros.soundtrack.helper.PlayerContent;
 import com.eros.soundtrack.helper.SoundTrackInfo;
-import com.eros.soundtrack.manager.ItemClickSupport;
+import com.eros.soundtrack.interfaces.PlayButtonListener;
 import com.eros.soundtrack.retrofit.APIHelper;
 
 /**
  * Created by eroschen on 2017/8/30.
  */
 
-public class PopularFragment extends SpannedGridViewFragment {
-    private GridViewRecyclerAdapter myAdapter;
+public class PopularFragment extends SpannedGridViewFragment implements PlayButtonListener{
+    private static GridViewRecyclerAdapter myAdapter;
     private int page = 1;
     private boolean loading = false;
     private int lastVisibleItem;
-    private EndlessScrollListener endlessScrollListener = new EndlessScrollListener();
+//    private EndlessScrollListener endlessScrollListener = new EndlessScrollListener();
     private MainActivity.TrackOnLoaded mTrackOnLoaded;
 
     public PopularFragment(MainActivity.TrackOnLoaded trackOnLoaded) {
@@ -64,11 +65,12 @@ public class PopularFragment extends SpannedGridViewFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        myAdapter = new GridViewRecyclerAdapter(mAct, mData);
+        myAdapter = new GridViewRecyclerAdapter(mAct, mData, this);
         mRecyclerView.setAdapter(myAdapter);
         APIHelper first = new APIHelper() {
             @Override
             protected void OnLoaded() {
+//                mData = SoundTrackInfo.getInstance().getPopularMovies();
                 myAdapter.mData = SoundTrackInfo.getInstance().getPopularMovies();
                 myAdapter.notifyDataSetChanged();
             }
@@ -80,31 +82,66 @@ public class PopularFragment extends SpannedGridViewFragment {
         };
         first.getPopularMovies(page);
 
-        mRecyclerView.addOnScrollListener(endlessScrollListener);
+        mRecyclerView.addOnScrollListener(new EndlessScrollListener());
 
         final Toast mToast = Toast.makeText(mAct, "", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
 
-        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+
+//        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+//            @Override
+//            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                Log.d("eros", "Item clicked: " + position);
+//                APIHelper getTrackList = new APIHelper() {
+//                    @Override
+//                    protected void OnLoaded() {
+//                        mTrackOnLoaded.showMediaPlayer(SoundTrackInfo.getInstance().getTrackList().get(0));
+//                    }
+//
+//                    @Override
+//                    protected void onFail(String message) {
+//
+//                    }
+//                };
+//                getTrackList.getMovieInfo(SoundTrackInfo.getInstance().getPopularMovies().get(position).getId());
+//
+//            }
+//
+//        });
+
+
+    }
+
+    @Override
+    public void onClick(final int position) {
+
+        APIHelper getTrackList = new APIHelper() {
             @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Log.d("eros", "Item clicked: " + position);
-                APIHelper getTrackList = new APIHelper() {
-                    @Override
-                    protected void OnLoaded() {
-                        mTrackOnLoaded.showMediaPlayer(SoundTrackInfo.getInstance().getTrackList().get(0));
+            protected void OnLoaded() {
+                if (myAdapter.mData.get(position).getPlaying()) {
+                    myAdapter.mData.get(position).setPlaying(false);
+                    PlayerContent.getInstance().setPlaying(false);
+                    myAdapter.notifyDataSetChanged();
+                    mTrackOnLoaded.hideMediaPlayer();
+                } else {
+                    for(GridItem item: myAdapter.mData){
+                        item.setPlaying(false);
                     }
+                    RecentFragment.initData();
+                    myAdapter.mData.get(position).setPlaying(true);
+                    PlayerContent.getInstance().setPlaying(true);
+                    myAdapter.notifyDataSetChanged();
+                    mTrackOnLoaded.showMediaPlayer(SoundTrackInfo.getInstance().getTrackList().get(0));
 
-                    @Override
-                    protected void onFail(String message) {
-
-                    }
-                };
-                getTrackList.getMovieInfo(SoundTrackInfo.getInstance().getPopularMovies().get(position).getId());
-
+                }
             }
 
-        });
+            @Override
+            protected void onFail(String message) {
+
+            }
+        };
+        getTrackList.getMovieInfo(SoundTrackInfo.getInstance().getPopularMovies().get(position).getId());
 
 
     }
@@ -132,6 +169,7 @@ public class PopularFragment extends SpannedGridViewFragment {
                 };
                 loadMore.getPopularMovies(page);
                 loading = true;
+
             }
 
 
@@ -145,4 +183,12 @@ public class PopularFragment extends SpannedGridViewFragment {
         }
 
     }
+
+    public static void initData(){
+        for(GridItem item: myAdapter.mData){
+            item.setPlaying(false);
+        }
+        myAdapter.notifyDataSetChanged();
+    }
+
 }

@@ -18,11 +18,12 @@
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="match_parent"-->
             <!--android:background="@color/white50Transparent"/>-->
-        <ImageView
-            android:id="@+id/iv_play_status"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+        <ImageButton
+            android:id="@+id/ib_play_status"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/play"
+            android:background="@android:color/transparent"
             android:layout_alignParentBottom="true"
             android:padding="10dp"/>
         <!--<TextView-->

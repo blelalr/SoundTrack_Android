@@ -56,6 +56,7 @@
         <!--android:layout_margin="@dimen/fab_margin"-->
         <!--android:src="@drawable/ic_done" />-->
     </android.support.design.widget.CoordinatorLayout>
+
     <FrameLayout
         android:id="@+id/media_player"
         android:layout_width="match_parent"

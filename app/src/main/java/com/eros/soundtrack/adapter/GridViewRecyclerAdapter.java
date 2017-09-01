@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -13,6 +14,7 @@ import com.bumptech.glide.request.target.Target;
 import com.eros.soundtrack.R;
 import com.eros.soundtrack.actiity.MainActivity;
 import com.eros.soundtrack.enity.GridItem;
+import com.eros.soundtrack.interfaces.PlayButtonListener;
 
 import java.util.ArrayList;
 
@@ -22,11 +24,15 @@ import java.util.ArrayList;
 
 public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecyclerAdapter.SimpleViewHolder> {
     private final MainActivity mAct;
-    public ArrayList<GridItem> mData;
+    public  ArrayList<GridItem> mData;
+    private PlayButtonListener mListerer;
 
-    public GridViewRecyclerAdapter(MainActivity mAct, ArrayList<GridItem> data) {
+
+    public GridViewRecyclerAdapter(MainActivity mAct, ArrayList<GridItem> data, PlayButtonListener listener) {
         this.mAct = mAct;
         this.mData = data;
+        this.mListerer = listener;
+
     }
 
     @Override
@@ -44,7 +50,15 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
                 .placeholder(R.color.colorAccent)
                 .listener(requestListener)
                 .error(R.color.white50Transparent)
-                .into(holder.mImageView);
+                .into(holder.ivPoster);
+
+        if (mData.get(position).getPlaying()){
+            holder.ibPlayStatus.setImageResource(R.drawable.stop);
+        } else {
+            holder.ibPlayStatus.setImageResource(R.drawable.play);
+        }
+
+
     }
 
     @Override
@@ -52,12 +66,20 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
         return mData.size();
     }
 
-    public static class SimpleViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView mImageView;
+    public class SimpleViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
+        public ImageView ivPoster;
+        public ImageButton ibPlayStatus;
 
         public SimpleViewHolder(View view) {
             super(view);
-            mImageView = (ImageView) view.findViewById(R.id.iv_poster);
+            ivPoster = (ImageView) view.findViewById(R.id.iv_poster);
+            ibPlayStatus = (ImageButton) view.findViewById(R.id.ib_play_status);
+            ibPlayStatus.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListerer.onClick(getAdapterPosition());
         }
     }
 

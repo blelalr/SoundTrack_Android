@@ -13,4 +13,7 @@ public interface Parameters {
 
     String Full = "full";
     String Mini = "mini";
+
+    String Popular ="popular";
+    String Recent ="recent";
 }

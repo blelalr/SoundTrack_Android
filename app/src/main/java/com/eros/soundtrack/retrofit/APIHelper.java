@@ -72,7 +72,6 @@ public abstract class APIHelper { //implements ApiParameters{
                     SoundTrackInfo.getInstance().setTrackList(response.body().getTrackInfo().getDataList());
                     PlayerContent.getInstance().setCover(response.body().getTrackInfo().getCover());
                     PlayerContent.getInstance().setCurIndex(0);
-                    PlayerContent.getInstance().setStatus(Parameters.Play);
                     PlayerContent.getInstance().setMode(Parameters.Mini);
                     OnLoaded();
                 }
