@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private FrameLayout mediaPlayer;
-    private TrackOnLoaded trackOnLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,31 +52,17 @@ public class MainActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        trackOnLoaded = new TrackOnLoaded() {
-            @Override
-            public void showMediaPlayer(Track track) {
-                mediaPlayer.setVisibility(View.VISIBLE);
-                PlayerContent.getInstance().setTrack(track);
-                MediaPlayerFragment mediaPlayerFragment = new MediaPlayerFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.media_player, mediaPlayerFragment).commit();
-            }
-
-            @Override
-            public void hideMediaPlayer() {
-                mediaPlayer.setVisibility(View.GONE);
-            }
-        };
-
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        PopularFragment popularFragment = new PopularFragment(trackOnLoaded);
-        RecentFragment recentFragment = new RecentFragment(trackOnLoaded);
+        PopularFragment popularFragment = new PopularFragment(new TrackOnLoadListener());
+        RecentFragment recentFragment = new RecentFragment(new TrackOnLoadListener());
         adapter.addFragment(popularFragment, "Popular");
         adapter.addFragment(recentFragment, "Recent");
 //        adapter.addFragment(new SpannedGridViewFragment(), "All");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +142,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
     }
+
+    public class TrackOnLoadListener implements TrackOnLoaded {
+        @Override
+        public void showMediaPlayer(Track track) {
+            mediaPlayer.setVisibility(View.VISIBLE);
+            PlayerContent.getInstance().setTrack(track);
+            MediaPlayerFragment mediaPlayerFragment = new MediaPlayerFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.media_player, mediaPlayerFragment).commit();
+        }
+
+        @Override
+        public void hideMediaPlayer() {
+            mediaPlayer.setVisibility(View.GONE);
+        }
+    }
+
 
     public interface TrackOnLoaded {
         void showMediaPlayer(Track track);

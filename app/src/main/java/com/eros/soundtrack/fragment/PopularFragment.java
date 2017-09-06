@@ -43,10 +43,9 @@ public class PopularFragment extends SpannedGridViewFragment implements PlayButt
     private int page = 1;
     private boolean loading = false;
     private int lastVisibleItem;
-//    private EndlessScrollListener endlessScrollListener = new EndlessScrollListener();
-    private MainActivity.TrackOnLoaded mTrackOnLoaded;
+    private MainActivity.TrackOnLoadListener mTrackOnLoaded;
 
-    public PopularFragment(MainActivity.TrackOnLoaded trackOnLoaded) {
+    public PopularFragment(MainActivity.TrackOnLoadListener trackOnLoaded) {
         this.mTrackOnLoaded = trackOnLoaded;
     }
 
@@ -70,7 +69,6 @@ public class PopularFragment extends SpannedGridViewFragment implements PlayButt
         APIHelper first = new APIHelper() {
             @Override
             protected void OnLoaded() {
-//                mData = SoundTrackInfo.getInstance().getPopularMovies();
                 myAdapter.mData = SoundTrackInfo.getInstance().getPopularMovies();
                 myAdapter.notifyDataSetChanged();
             }
@@ -86,29 +84,6 @@ public class PopularFragment extends SpannedGridViewFragment implements PlayButt
 
         final Toast mToast = Toast.makeText(mAct, "", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
-
-
-//        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-//            @Override
-//            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-//                Log.d("eros", "Item clicked: " + position);
-//                APIHelper getTrackList = new APIHelper() {
-//                    @Override
-//                    protected void OnLoaded() {
-//                        mTrackOnLoaded.showMediaPlayer(SoundTrackInfo.getInstance().getTrackList().get(0));
-//                    }
-//
-//                    @Override
-//                    protected void onFail(String message) {
-//
-//                    }
-//                };
-//                getTrackList.getMovieInfo(SoundTrackInfo.getInstance().getPopularMovies().get(position).getId());
-//
-//            }
-//
-//        });
-
 
     }
 
