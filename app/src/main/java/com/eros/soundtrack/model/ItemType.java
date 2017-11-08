@@ -15,36 +15,14 @@
  *
  */
 
-package com.eros.soundtrack.enity;
-
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
+package com.eros.soundtrack.model;
 
 /**
- * Created by eroschen on 2017/8/31.
+ * Created by smedic on 9.2.17..
  */
 
-public class Artist implements Serializable {
-    @SerializedName("_id")
-    private int id;
-
-    @SerializedName("name")
-    private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+public enum ItemType {
+    YOUTUBE_MEDIA_NONE,
+    YOUTUBE_MEDIA_TYPE_VIDEO,
+    YOUTUBE_MEDIA_TYPE_PLAYLIST
 }

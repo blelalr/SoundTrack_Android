@@ -1,5 +1,6 @@
 package com.eros.soundtrack.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.eros.soundtrack.R;
-import com.eros.soundtrack.actiity.MainActivity;
 import com.eros.soundtrack.enity.GridItem;
 import com.eros.soundtrack.interfaces.PlayButtonListener;
 
@@ -23,13 +23,12 @@ import java.util.ArrayList;
  */
 
 public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecyclerAdapter.SimpleViewHolder> {
-    private final MainActivity mAct;
+    private static final String TAG = GridViewRecyclerAdapter.class.getSimpleName();
+    private Context mContext;
     public  ArrayList<GridItem> mData;
     private PlayButtonListener mListerer;
 
-
-    public GridViewRecyclerAdapter(MainActivity mAct, ArrayList<GridItem> data, PlayButtonListener listener) {
-        this.mAct = mAct;
+    public GridViewRecyclerAdapter(ArrayList<GridItem> data, PlayButtonListener listener) {
         this.mData = data;
         this.mListerer = listener;
 
@@ -37,14 +36,19 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
 
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(mAct).inflate(R.layout.grid_item, parent, false);
+        mContext = parent.getContext();
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.grid_item, parent, false);
         return new SimpleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, int position) {
-
-        Glide.with(mAct)
+        String webUrl = "https://www.what-song.com";
+        String posterUrl = mData.get(position).getPosterURL();
+        if(!posterUrl.contains("http")){
+            mData.get(position).setPosterURL(webUrl + posterUrl);
+        }
+        Glide.with(mContext)
                 .load(mData.get(position).getPosterURL())
                 .centerCrop()
                 .placeholder(R.color.colorAccent)
@@ -53,9 +57,9 @@ public class GridViewRecyclerAdapter extends RecyclerView.Adapter<GridViewRecycl
                 .into(holder.ivPoster);
 
         if (mData.get(position).getPlaying()){
-            holder.ibPlayStatus.setImageResource(R.drawable.stop);
+            holder.ibPlayStatus.setImageResource(R.drawable.status_play);
         } else {
-            holder.ibPlayStatus.setImageResource(R.drawable.play);
+            holder.ibPlayStatus.setImageResource(R.drawable.status_pause);
         }
 
 

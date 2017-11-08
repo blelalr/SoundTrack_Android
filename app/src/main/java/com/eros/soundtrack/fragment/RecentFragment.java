@@ -62,7 +62,7 @@ public class RecentFragment extends SpannedGridViewFragment implements PlayButto
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        myAdapter = new GridViewRecyclerAdapter(mAct, mData, this);
+        myAdapter = new GridViewRecyclerAdapter(mData, this);
         mRecyclerView.setAdapter(myAdapter);
 
         APIHelper first = new APIHelper() {

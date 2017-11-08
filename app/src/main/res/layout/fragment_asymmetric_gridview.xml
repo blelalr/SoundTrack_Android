@@ -15,5 +15,5 @@
         android:elevation="1dp"
         app:layoutManager="com.eros.soundtrack.manager.SpannedGridLayoutManager"
         app:spanCount="@integer/num_columns"
-        app:aspectRatio="6:5" />
+        app:aspectRatio="6:5"/>
 </RelativeLayout>

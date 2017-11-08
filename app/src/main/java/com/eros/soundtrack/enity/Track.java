@@ -2,11 +2,13 @@ package com.eros.soundtrack.enity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by eroschen on 2017/7/20.
  */
 
-public class Track {
+public class Track implements Serializable {
     @SerializedName("_id")
     private int id;
 
@@ -28,16 +30,12 @@ public class Track {
     @SerializedName("artist")
     private Artist artist;
 
+    private String thumbnailURL;
+    private String duration;
+    private String viewCount;
+
     public String getArtistName() {
         return artist.getName();
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getYoutubeId() {
@@ -48,13 +46,6 @@ public class Track {
         this.youtubeId = youtubeId;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getAlbum() {
         return album;
@@ -78,5 +69,54 @@ public class Track {
 
     public void setPriviewUrl(String priviewUrl) {
         this.priviewUrl = priviewUrl;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public void setThumbnailURL(String thumbnail) {
+        this.thumbnailURL = thumbnail;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    @Override
+    public String toString() {
+        return "YouTubeVideo {" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }
