@@ -55,10 +55,10 @@
             android:textSize="16dp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:layout_toLeftOf="@+id/iv_back"
             android:layout_alignTop="@+id/iv_cover"
             android:layout_toEndOf="@+id/iv_cover"
-            android:layout_marginEnd="10dp"/>
+            android:layout_toStartOf="@+id/iv_pre"
+            android:lines="1"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -68,27 +68,28 @@
             android:textSize="14dp"
             android:textColor="@color/colorPrimary"
             android:layout_toRightOf="@+id/iv_cover"
-            android:layout_toLeftOf="@+id/iv_back"
             android:layout_below="@+id/tv_artist"
-            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/iv_pre"
+            android:layout_marginBottom="5dp"
+            android:lines="1"
             />
 
         <ImageView
-            android:id="@+id/iv_back"
+            android:id="@+id/iv_pre"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="7dp"
-            android:layout_toStartOf="@+id/iv_status"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/iv_status"
             app:srcCompat="@drawable/pre" />
 
         <ImageView
             android:id="@+id/iv_status"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="7dp"
-            android:layout_toStartOf="@+id/iv_next"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/iv_next"
             app:srcCompat="@drawable/pause" />
 
         <ImageView
@@ -97,12 +98,8 @@
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="11dp"
+            android:layout_marginEnd="10dp"
             app:srcCompat="@drawable/next" />
-
-
-
-
     </RelativeLayout>
 
 </RelativeLayout>

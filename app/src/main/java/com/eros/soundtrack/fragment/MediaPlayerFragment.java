@@ -37,11 +37,10 @@ import com.eros.soundtrack.interfaces.Parameters;
 
 public class MediaPlayerFragment extends BaseFragment {
     private RelativeLayout rlFull, rlMini;
-    private ImageView ivCover;
+    private ImageView ivCover, ivPre, ivStatus, ivNext;
     private TextView tvArtist,tvTitle;
     private PlayerContent playerContent = PlayerContent.getInstance();
     private String Mode = playerContent.getMode();
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +54,12 @@ public class MediaPlayerFragment extends BaseFragment {
         rlFull = (RelativeLayout)view.findViewById(R.id.rl_full_mode);
         rlMini = (RelativeLayout)view.findViewById(R.id.rl_mini_mode);
         ivCover = (ImageView) view.findViewById(R.id.iv_cover);
+        ivPre = (ImageView) view.findViewById(R.id.iv_pre);
+        ivStatus = (ImageView) view.findViewById(R.id.iv_status);
+        ivNext = (ImageView) view.findViewById(R.id.iv_next);
         tvArtist = (TextView) view.findViewById(R.id.tv_artist);
         tvTitle =  (TextView) view.findViewById(R.id.tv_title);
+
 
         return view;
     }
@@ -81,6 +84,13 @@ public class MediaPlayerFragment extends BaseFragment {
             rlFull.setVisibility(View.GONE);
             tvArtist.setText(playerContent.getTrack().getArtistName());
             tvTitle.setText(playerContent.getTrack().getTitle());
+
+            ivPre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             Glide.with(mAct)
                     .load(playerContent.getCover())
                     .centerCrop()
@@ -90,5 +100,6 @@ public class MediaPlayerFragment extends BaseFragment {
 
         }
     }
+
 
 }

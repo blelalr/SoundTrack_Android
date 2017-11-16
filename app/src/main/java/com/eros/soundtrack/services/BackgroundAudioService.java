@@ -60,7 +60,7 @@ import at.huber.youtubeExtractor.YtFile;
 public class BackgroundAudioService extends Service implements MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener {
 
-    private static final String TAG = "SMEDIC service";
+    private static final String TAG = "Audio Service";
 
     public static final String ACTION_PLAY = "action_play";
     public static final String ACTION_PAUSE = "action_pause";
@@ -514,7 +514,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
             protected void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
                 if (ytFiles == null) {
                     // Something went wrong we got no urls. Always check this.
-
+                    Log.d(TAG, "Something went wrong we got no urls. Always check this.");
                     return;
                 }
                 deviceBandwidthSampler.stopSampling();

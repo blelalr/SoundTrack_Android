@@ -17,7 +17,6 @@
 
 package com.eros.soundtrack.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -33,12 +32,7 @@ import com.eros.soundtrack.enity.GridItem;
 import com.eros.soundtrack.helper.PlayerContent;
 import com.eros.soundtrack.helper.SoundTrackInfo;
 import com.eros.soundtrack.interfaces.PlayButtonListener;
-import com.eros.soundtrack.model.ItemType;
 import com.eros.soundtrack.retrofit.APIHelper;
-import com.eros.soundtrack.services.BackgroundAudioService;
-import com.eros.soundtrack.utils.Config;
-
-import java.util.ArrayList;
 
 /**
  * Created by eroschen on 2017/8/30.
@@ -114,12 +108,7 @@ public class PopularFragment extends SpannedGridViewFragment implements PlayButt
                     myAdapter.notifyDataSetChanged();
                     if(SoundTrackInfo.getInstance().getTrackList().size() != 0) {
                         mTrackOnLoaded.showMediaPlayer(SoundTrackInfo.getInstance().getTrackList().get(0));
-                        Intent serviceIntent = new Intent(mAct, BackgroundAudioService.class);
-                        serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
-                        serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_PLAYLIST);
-                        serviceIntent.putExtra(Config.YOUTUBE_TYPE_PLAYLIST, (ArrayList) SoundTrackInfo.getInstance().getTrackList());
-                        serviceIntent.putExtra(Config.YOUTUBE_TYPE_PLAYLIST_VIDEO_POS, position);
-                        mAct.startService(serviceIntent);
+
 
                     }
 

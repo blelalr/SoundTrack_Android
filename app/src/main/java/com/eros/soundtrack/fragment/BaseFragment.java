@@ -30,7 +30,7 @@ import com.eros.soundtrack.actiity.MainActivity;
  * Created by eroschen on 2017/8/30.
  */
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
     public MainActivity mAct;
 
     @Override
